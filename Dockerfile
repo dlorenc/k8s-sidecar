@@ -1,6 +1,7 @@
-FROM python:3.11.0-alpine3.16 as base
+FROM cgr.dev/chainguard/wolfi-base as base
 
 FROM base as builder
+RUN apk add python3 py3-pip
 WORKDIR /app
 RUN python -m venv .venv && .venv/bin/pip install --no-cache-dir -U pip setuptools
 COPY        src/ /app/
@@ -11,6 +12,7 @@ RUN apk add --no-cache gcc && \
 
 
 FROM base
+RUN apk add python3
 ENV         PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY --from=builder /app /app
